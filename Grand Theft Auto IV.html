@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://bigpicture.playtab.fun/play/gran-theft-auto-iv -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gran Theft Auto IV</title><style>html,body{margin:0;height:100%;background:#000;overflow:hidden}
+.st{position:fixed;inset:0;overflow:hidden;--c:0px}.st.is-crop{--c:var(--cd)}@media(max-width:700px){.st.is-crop{--c:var(--cm)}}
+iframe{position:absolute;left:0;width:100%;border:0;top:calc(-1*var(--c));height:calc(100% + var(--c))}</style></head><body>
+<div class="st" style=""><iframe src="./Grand Theft Auto IV_files/saved_resource.html" title="Gran Theft Auto IV" allow="fullscreen; gamepad; autoplay; screen-wake-lock; clipboard-write; keyboard-map; accelerometer; gyroscope; web-share; storage-access" sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-downloads allow-storage-access-by-user-activation allow-orientation-lock allow-presentation" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<script nonce="">(function (C) {
+  var f = document.querySelector('iframe'); f.focus();
+  var call = function (a, d) {
+    return fetch('/acc.php?a=' + a, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-CSRF': C.csrf }, body: JSON.stringify(d) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, d: j }; }); }, function () { return { ok: false, status: 0, d: {} }; });
+  };
+  addEventListener('message', function (e) {
+    var d = e.data;
+    if (e.source !== f.contentWindow || e.origin !== C.origin || !d || typeof d !== 'object') return;
+    var reply = function (m) { try { f.contentWindow.postMessage(m, C.origin); } catch (x) {} };
+    if (d.pt === 'save-hello') {
+      if (!C.on) { reply({ pt: 'save-off' }); return; }
+      call('save-get', { slot: C.slot }).then(function (r) { reply(r.ok ? { pt: 'save-data', data: r.d.data || null, t: r.d.t || 0, game: C.game } : { pt: 'save-off' }); });
+    } else if (d.pt === 'save-put' && C.on && typeof d.data === 'string' && d.data.length <= 2e6) {
+      call('save-put', { slot: C.slot, data: d.data, t: Number(d.t) || Date.now(), meta: d.meta && typeof d.meta === 'object' ? d.meta : null })
+        .then(function (r) { reply({ pt: 'save-ack', ok: r.ok, retry: r.status === 429 || r.status === 0 }); });
+    } else if (d.pt === 'save-note' && typeof d.msg === 'string') console.warn('PlayTab sauvegarde cloud : ' + d.msg.slice(0, 200));
+    // Cloud des jeux PS2 / PSP (page ps2.playtab.fun, shell.html) : le numéro du jeu vient d'ici, jamais de la page
+    else if (d.pt === 'cloud-hello') {
+      if (!C.cloud) { reply({ pt: 'cloud-state', on: false, login: true }); return; }
+      call('cloud-get', { game: C.cg }).then(function (r) { reply({ pt: 'cloud-state', on: r.ok, premium: !!(r.d && r.d.premium), save: r.ok ? r.d.save || null : null, url: r.ok ? r.d.url || null : null }); });
+    } else if (d.pt === 'cloud-put' && C.cloud) {
+      call('cloud-put-url', { game: C.cg, size: Number(d.size) || 0 }).then(function (r) { reply({ pt: 'cloud-put-url', ok: r.ok, url: r.ok ? r.d.url : null, err: (r.d && r.d.error) || '' }); });
+    } else if (d.pt === 'cloud-done' && C.cloud) {
+      call('cloud-put-done', { game: C.cg, t: Number(d.t) || 0, sha: String(d.sha || ''), kind: String(d.kind || ''), dev: 'web', force: !!d.force })
+        .then(function (r) { reply({ pt: 'cloud-ack', ok: r.ok, err: (r.d && r.d.error) || '', save: r.ok ? r.d.save : null }); });
+    } else if (d.pt === 'cloud-premium') {
+      try { parent.postMessage({ pt: 'bp-cloud', a: 'premium' }, location.origin); } catch (x) {}
+    }
+  });
+})({"origin":"https://ps2.playtab.fun","slot":"play.playtab.fun","game":1028,"cg":1028,"on":false,"csrf":"","cloud":false});</script>
+<script type="module" src="./Grand Theft Auto IV_files/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;853ac3f31da14a44b0afe1f6cd127928&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+</body></html>
